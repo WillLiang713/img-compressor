@@ -121,13 +121,20 @@ results = compress_directory(
 #### 输出压缩报告
 
 ```python
-from compress import compress_directory, _print_report
+from compress import compress_directory
 
 target_size = 1_000_000  # 1 MB
 results = compress_directory("/path/to/images", target_size=target_size)
 
-# 打印格式化的压缩报告
-_print_report(results, target_size)
+# 自定义输出格式
+for result in results:
+    status = "成功" if result.succeeded else "未达标"
+    original_mb = result.original_size / 1024 / 1024
+    final_mb = result.final_size / 1024 / 1024
+    print(f"{status}: {result.path.name}")
+    print(f"  原始: {original_mb:.2f}MB -> 最终: {final_mb:.2f}MB")
+    if result.note:
+        print(f"  备注: {result.note}")
 ```
 
 ## 压缩策略
